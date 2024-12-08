@@ -32,7 +32,7 @@ fn work(dts_path: &str, output_path: &str) {
         return;
     };
 
-    let res = match wsdom_ts_convert::convert(dts_file) {
+    let res = match px_wsdom_ts_convert::convert(dts_file) {
         Ok(r) => r,
         Err(e) => {
             println!("conversion error: {e}");

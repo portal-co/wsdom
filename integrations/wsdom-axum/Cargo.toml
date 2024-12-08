@@ -1,5 +1,5 @@
 [package]
-name = "wsdom-axum"
+name = "px-wsdom-axum"
 version = "0.0.1"
 edition = "2021"
 license = "MPL-2.0"
@@ -13,5 +13,5 @@ categories = ["api-bindings"]
 [dependencies]
 futures-util = { version = "0.3", features = ["sink"] }
 axum = { version = "0.7", features = ["ws"] }
-wsdom-core = { path = "../../wsdom-core/", version = "0.0.1" }
+wsdom-core = { path = "../../wsdom-core/", version = "0.0.1", package = "px-wsdom-core"  }
 pin-project-lite = "0.2.13"

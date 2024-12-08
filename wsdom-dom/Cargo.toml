@@ -1,5 +1,5 @@
 [package]
-name = "wsdom-dom"
+name = "px-wsdom-dom"
 version = "0.0.1"
 edition = "2021"
 license = "MPL-2.0"
@@ -9,9 +9,9 @@ description = "for the wsdom crate"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-wsdom-macros = { path = "../wsdom-macros/", version = "0.0.1" }
-wsdom-macros-decl = { path = "../wsdom-macros-decl/", version = "0.0.1" }
-wsdom-core = { path = "../wsdom-core/", version = "0.0.1" }
-wsdom-javascript = { path = "../wsdom-javascript/", version = "0.0.1" }
+wsdom-macros = { path = "../wsdom-macros/", version = "0.0.1", package = "px-wsdom-macros"  }
+wsdom-macros-decl = { path = "../wsdom-macros-decl/", version = "0.0.1", package = "px-wsdom-macros-decl"  }
+wsdom-core = { path = "../wsdom-core/", version = "0.0.1", package = "px-wsdom-core"  }
+wsdom-javascript = { path = "../wsdom-javascript/", version = "0.0.1", package = "px-wsdom-javascript"  }
 ref-cast = "1"
 serde = { version = "1" }

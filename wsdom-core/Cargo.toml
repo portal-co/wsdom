@@ -1,5 +1,5 @@
 [package]
-name = "wsdom-core"
+name = "px-wsdom-core"
 version = "0.0.1"
 edition = "2021"
 license = "MPL-2.0"
@@ -15,5 +15,5 @@ ref-cast = "1"
 futures-core = "0.3"
 
 [dev-dependencies]
-wsdom = { path = "../wsdom/" }
+# wsdom = { path = "../wsdom/", packege = "px-wsdom" }
 futures-util = { version = "0.3.30" }
