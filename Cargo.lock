@@ -548,7 +548,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "px-wsdom-core",
  "px-wsdom-dom",
@@ -561,7 +561,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-axum"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "axum",
  "futures-util",
@@ -571,7 +571,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-core"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "futures-core",
  "futures-util",
@@ -582,7 +582,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-dom"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "px-wsdom-core",
  "px-wsdom-javascript",
@@ -594,7 +594,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-javascript"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "px-wsdom-core",
  "px-wsdom-macros",
@@ -605,7 +605,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-macros"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "proc-macro2",
  "px-wsdom-ts-convert",
@@ -615,11 +615,11 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-macros-decl"
-version = "0.0.1"
+version = "0.0.2"
 
 [[package]]
 name = "px-wsdom-ts-convert"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "proc-macro2",
  "quote",
