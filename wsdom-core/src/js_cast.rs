@@ -1,3 +1,5 @@
+use std::{future::Future, marker::PhantomData};
+
 use crate::js::value::JsValue;
 
 /// For converting between JavaScript types.
@@ -32,4 +34,22 @@ where
     // fn is_instance_of<T>(&self) -> bool
     //    where T: JsCast { ... }
     // fn is_type_of(val: &JsValue) -> bool { ... }
+}
+pin_project_lite::pin_project! {
+    #[derive(Clone, Copy)]
+    pub struct Cast<T,U>{
+        #[pin]
+        pub value: T,
+        pub phantom: PhantomData<U>
+    }
+}
+impl<T: Future<Output: JsCast>, U: JsCast> Future for Cast<T, U> {
+    type Output = U;
+
+    fn poll(
+        self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Self::Output> {
+        self.project().value.poll(cx).map(|a| a.unchecked_into())
+    }
 }

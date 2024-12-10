@@ -20,7 +20,8 @@ pub mod js_types {
     };
 }
 pub use interaction::callback;
-pub use js_cast::JsCast;
+pub use interaction::r#await;
+pub use js_cast::{JsCast,Cast};
 pub use serialize::{ToJs, UseInJsCode};
 pub mod immediates {
     pub use super::js::immediates::{null, undefined};
