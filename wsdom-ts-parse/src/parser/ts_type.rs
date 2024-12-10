@@ -14,7 +14,7 @@ use super::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) enum TsType<'a> {
+pub enum TsType<'a> {
     Named {
         ty: NamedType<'a>,
     },
@@ -168,7 +168,7 @@ impl<'a> Parsable<'a> for TsType<'a> {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct NamedType<'a> {
+pub struct NamedType<'a> {
     pub name: &'a str,
     pub generic: GenericArgs<'a>,
 }

@@ -9,7 +9,7 @@ use super::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct DeclareVar<'a> {
+pub struct DeclareVar<'a> {
     pub name: &'a str,
     pub ty: TsType<'a>,
 }

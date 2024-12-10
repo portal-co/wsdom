@@ -10,7 +10,7 @@ use super::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct TypeAlias<'a> {
+pub struct TypeAlias<'a> {
     pub name: &'a str,
     pub generics: GenericsDeclaration<'a>,
     pub ty: TsType<'a>,

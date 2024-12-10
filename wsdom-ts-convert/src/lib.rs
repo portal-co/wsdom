@@ -2,7 +2,7 @@ use parser::{comment::WithComment, item::Item};
 use quote::quote;
 
 pub(crate) mod generator;
-pub(crate) mod parser;
+pub(crate) use px_wsdom_ts_parse::parser;
 
 struct ParseError {
     content: String,

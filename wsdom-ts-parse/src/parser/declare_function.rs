@@ -11,7 +11,7 @@ use super::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct DeclareFunction<'a> {
+pub struct DeclareFunction<'a> {
     pub name: &'a str,
     pub generics: GenericsDeclaration<'a>,
     pub args: Vec<MethodArg<'a>>,

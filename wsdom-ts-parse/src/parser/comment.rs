@@ -8,7 +8,7 @@ use winnow::{
 use super::util::Parsable;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct Comment<'a> {
+pub struct Comment<'a> {
     pub source: &'a str,
 }
 
@@ -24,7 +24,7 @@ impl<'a> Parsable<'a> for Comment<'a> {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct WithComment<'a, T> {
+pub struct WithComment<'a, T> {
     pub comment: Vec<Comment<'a>>,
     pub data: T,
 }

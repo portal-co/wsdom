@@ -10,7 +10,7 @@ use super::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct Method<'a> {
+pub struct Method<'a> {
     pub name: MethodName<'a>,
     pub generics: GenericsDeclaration<'a>,
     pub args: Vec<MethodArg<'a>>,
@@ -47,7 +47,7 @@ impl<'a> Parsable<'a> for Method<'a> {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct MethodArg<'a> {
+pub struct MethodArg<'a> {
     pub name: &'a str,
     pub optional: bool,
     pub ty: TsType<'a>,
@@ -71,7 +71,7 @@ impl<'a> Parsable<'a> for MethodArg<'a> {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub(crate) enum MethodName<'a> {
+pub enum MethodName<'a> {
     Nothing,
     Constructor,
     Iterator,

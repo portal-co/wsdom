@@ -1,0 +1,12 @@
+[package]
+name = "px-wsdom-ts-parse"
+version = "0.1.0"
+edition = "2021"
+license = "MPL-2.0"
+repository = "https://github.com/portal-co/wsdom"
+description = "for the wsdom crate, and potentially other uses"
+
+[dependencies]
+winnow = "0.5.17"
+proc-macro2 = "1"
+quote = "1"

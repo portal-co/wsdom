@@ -6,7 +6,7 @@ use super::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) enum Item<'a> {
+pub enum Item<'a> {
     Interface(Interface<'a>),
     DeclareVar(DeclareVar<'a>),
     DeclareFunction(DeclareFunction<'a>),

@@ -7,7 +7,7 @@ use winnow::{
 use super::util::{token, word1, Parsable};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) enum Expr<'a> {
+pub enum Expr<'a> {
     Name { name: &'a str },
     Dot { left: Box<Expr<'a>>, right: &'a str },
 }

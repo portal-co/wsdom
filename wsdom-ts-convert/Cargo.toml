@@ -12,3 +12,4 @@ description = "for the wsdom crate"
 winnow = "0.5.17"
 proc-macro2 = "1"
 quote = "1"
+px-wsdom-ts-parse = { version = "0.1.0", path = "../wsdom-ts-parse" }

@@ -12,7 +12,7 @@ use super::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) enum Member<'a> {
+pub enum Member<'a> {
     Method(Method<'a>),
     Field(Field<'a>),
     Getter(Getter<'a>),
@@ -34,7 +34,7 @@ impl<'a> Parsable<'a> for Member<'a> {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct Getter<'a> {
+pub struct Getter<'a> {
     pub name: &'a str,
     pub ret: TsType<'a>,
 }
@@ -51,7 +51,7 @@ impl<'a> Parsable<'a> for Getter<'a> {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct Setter<'a> {
+pub struct Setter<'a> {
     pub name: &'a str,
     pub arg_name: &'a str,
     pub arg_ty: TsType<'a>,

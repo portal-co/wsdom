@@ -9,7 +9,7 @@ use super::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct Field<'a> {
+pub struct Field<'a> {
     pub name: FieldName<'a>,
     pub readonly: bool,
     pub optional: bool,
@@ -37,7 +37,7 @@ impl<'a> Parsable<'a> for Field<'a> {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) enum FieldName<'a> {
+pub enum FieldName<'a> {
     Name(&'a str),
     Wildcard { name: &'a str, ty: TsType<'a> },
 }

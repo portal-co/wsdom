@@ -622,6 +622,16 @@ name = "px-wsdom-ts-convert"
 version = "0.0.2"
 dependencies = [
  "proc-macro2",
+ "px-wsdom-ts-parse",
+ "quote",
+ "winnow",
+]
+
+[[package]]
+name = "px-wsdom-ts-parse"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
  "quote",
  "winnow",
 ]

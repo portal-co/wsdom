@@ -8,23 +8,23 @@ use crate::parser::util::{quote_backslash_escape, token, token_word};
 
 use self::util::Parsable;
 
-pub(crate) mod comment;
-pub(crate) mod declare_class;
-pub(crate) mod declare_function;
-pub(crate) mod declare_var;
-pub(crate) mod expr;
-pub(crate) mod field;
-pub(crate) mod generic;
-pub(crate) mod interface;
-pub(crate) mod item;
-pub(crate) mod member;
-pub(crate) mod method;
-pub(crate) mod namespace;
-pub(crate) mod ts_type;
-pub(crate) mod type_alias;
-pub(crate) mod util;
+pub mod comment;
+pub mod declare_class;
+pub mod declare_function;
+pub mod declare_var;
+pub mod expr;
+pub mod field;
+pub mod generic;
+pub mod interface;
+pub mod item;
+pub mod member;
+pub mod method;
+pub mod namespace;
+pub mod ts_type;
+pub mod type_alias;
+pub mod util;
 
-pub(crate) fn parse_all<'a>(
+pub fn parse_all<'a>(
     input: &mut &'a str,
 ) -> PResult<Vec<comment::WithComment<'a, item::Item<'a>>>> {
     loop {
@@ -47,7 +47,7 @@ pub(crate) fn parse_all<'a>(
     Ok(out)
 }
 
-pub(crate) fn parse_imports<'a>(input: &mut &'a str) -> PResult<Vec<&'a str>> {
+pub fn parse_imports<'a>(input: &mut &'a str) -> PResult<Vec<&'a str>> {
     fn parse_import<'a>(input: &mut &'a str) -> PResult<&'a str> {
         delimited(
             (

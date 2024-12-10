@@ -11,7 +11,7 @@ use super::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct Namespace<'a> {
+pub struct Namespace<'a> {
     name: &'a str,
     items: Vec<WithComment<'a, Item<'a>>>,
 }

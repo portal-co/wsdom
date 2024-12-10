@@ -1,35 +1,30 @@
 use winnow::{
-    combinator::{delimited, opt, preceded, repeat, separated1},
-    PResult, Parser,
+    combinator::{delimited, opt, preceded, repeat},
+    prelude::PResult,
+    Parser,
 };
 
 use super::{
     comment::WithComment,
     generic::GenericsDeclaration,
     member::Member,
-    ts_type::TsType,
     util::{token, token_word, word1, Parsable},
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct Interface<'a> {
+pub struct DeclareClass<'a> {
     pub name: &'a str,
     pub generics: GenericsDeclaration<'a>,
-    pub extends: Vec<TsType<'a>>,
     pub members: Vec<WithComment<'a, Member<'a>>>,
 }
 
-impl<'a> Parsable<'a> for Interface<'a> {
+impl<'a> Parsable<'a> for DeclareClass<'a> {
     fn parse(input: &mut &'a str) -> PResult<Self> {
         preceded(
-            token_word("interface"),
+            (token_word("declare"), token_word("class")),
             (
                 word1,
                 opt(GenericsDeclaration::parse),
-                opt(preceded(
-                    token_word("extends"),
-                    separated1(TsType::parse, token(',')),
-                )),
                 delimited(
                     token('{'),
                     repeat(0.., WithComment::<Member>::parse),
@@ -37,10 +32,9 @@ impl<'a> Parsable<'a> for Interface<'a> {
                 ),
             ),
         )
-        .map(|(name, generic, extends, members)| Self {
+        .map(|(name, generics, members)| Self {
             name,
-            generics: generic.unwrap_or_default(),
-            extends: extends.unwrap_or_default(),
+            generics: generics.unwrap_or_default(),
             members,
         })
         .parse_next(input)

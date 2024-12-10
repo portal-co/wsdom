@@ -9,7 +9,7 @@ use super::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
-pub(crate) struct GenericsDeclaration<'a> {
+pub struct GenericsDeclaration<'a> {
     pub args: Vec<GenericsDeclarationArg<'a>>,
 }
 
@@ -26,7 +26,7 @@ impl<'a> Parsable<'a> for GenericsDeclaration<'a> {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct GenericsDeclarationArg<'a> {
+pub struct GenericsDeclarationArg<'a> {
     pub name: &'a str,
     pub extends: Option<TsType<'a>>,
     pub default: Option<TsType<'a>>,
@@ -47,7 +47,7 @@ impl<'a> Parsable<'a> for GenericsDeclarationArg<'a> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
-pub(crate) struct GenericArgs<'a> {
+pub struct GenericArgs<'a> {
     pub args: Vec<TsType<'a>>,
 }
 
