@@ -4,7 +4,9 @@ macro_rules! impl_basic {
         #[repr(transparent)]
         pub struct $name $(<$generic>)? (JsValue, ::core::marker::PhantomData <($($generic,)?)> );
 
-        impl $(<$generic>)? std::ops::Deref for $name $(<$generic>)? {
+        $crate::wrap!([$(<$generic>)?] as (|v|$name(v,::core::marker::PhantomData)) => $name $(<$generic>)?);
+
+        impl $(<$generic>)? core::ops::Deref for $name $(<$generic>)? {
             type Target = JsValue;
             fn deref(&self) -> &JsValue {
                 self.as_ref()
@@ -23,7 +25,7 @@ macro_rules! impl_basic {
         }
 
         impl $(<$generic>)? UseInJsCode for $name $(<$generic>)? {
-            fn serialize_to(&self, buf: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            fn serialize_to(&self, buf: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
                 self.0.serialize_to(buf)
             }
         }

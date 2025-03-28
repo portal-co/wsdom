@@ -7,7 +7,7 @@ members = [
 	"wsdom/",
 	"wsdom-javascript/",
 	"wsdom-dom/",
-	"integrations/wsdom-axum/", "wsdom-ts-parse",
+	"integrations/wsdom-axum/", "wsdom-ts-parse", "wsdom-gen",
 	# "examples/hello/",
 	# "examples/counter-manual/",
 	# "examples/many-examples/"

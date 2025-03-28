@@ -1,3 +1,5 @@
+use alloc::string::String;
+
 use crate::{
     js::value::JsValue, js_cast::JsCast, retrieve::RetrieveFuture, serialize::UseInJsCode,
 };

@@ -1,5 +1,7 @@
 #![allow(non_snake_case)]
 #![allow(non_camel_case_types)]
+#![no_std]
+extern crate alloc;
 mod __wsdom_load_ts_macro {
     pub use ref_cast::RefCast;
     pub use wsdom_core::{

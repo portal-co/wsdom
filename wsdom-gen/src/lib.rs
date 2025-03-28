@@ -1,5 +1,10 @@
+use std::{collections::BTreeMap, fmt::Display};
 
-type Id = number;
+use itertools::Itertools;
+use sha3::Digest;
+pub fn gen<D: Display>(modules: &[D], rpcs: &BTreeMap<String, usize>) -> String {
+    let modules = modules.iter().map(|a| format!("{a}")).collect_vec();
+    const S: &str = r#"type Id = number;
 type Value = unknown;
 type SendMessage = (msg: string) => void;
 
@@ -33,7 +38,7 @@ export class WSDOM {
 		const fn = new Function('_w', msg);
 		fn(this.internal);
 	}
-    
+    #e
 }
 export class WSDOMCore{
 	public sender: SendMessage;
@@ -52,6 +57,7 @@ export class WSDOMCore{
         this.values.set(i,{value: v, error: false});
         return i;
     }
+    public a = this.allocate;
 	public g = (id: Id): Value => {
 		var w = this.values.get(id);
 		if (w?.error) {
@@ -76,11 +82,10 @@ export class WSDOMCore{
             cb(val)
         }
 	}
-	public c = (id: Id, slot: Id): {value: Value} | {slot: Id} | undefined  => {
+	public c = (id: Id): {value: Value} | {slot: Id} | undefined  => {
 		var w = this.values.get(id);
 		if(w?.error){
-			this.values.set(slot,{value: w.value, error: false});
-			return {slot};
+			return {slot: this.allocate(w.value)};
 		}else{
 			return {value: w?.value}
 		}
@@ -88,5 +93,50 @@ export class WSDOMCore{
 	public e = (id: Id, value: Value) => {
 		this.values.set(id, { value, error: true })
 	}
-    public x: {[key: string]: Value} = {};
+    public x: {[key: string]: Value} = {#x};
+}
+"#;
+    return format!(
+        "{}\n{}",
+        modules
+            .iter()
+            .enumerate()
+            .map(|(i, m)| format!("import * as m{i} from '{m}'"))
+            .join("\n"),
+        S.replace(
+            "#x",
+            &modules
+                .iter()
+                .enumerate()
+                .map(|(i, m)| format!(
+                    "_{} :m{i} as Value",
+                    hex::encode(&sha3::Sha3_256::digest(m.as_bytes()))
+                ))
+                .join(",")
+        )
+        .replace(
+            "#e",
+            &rpcs
+                .iter()
+                .map(|(a, v)| format!(
+                    r#"public {a} = ({}): Promise<Value> => {{
+                        return new Promise((then) => {{
+                            var i = 0;
+                            while(this.internal.callbacks.contains(i))i++;
+                            this.internal.callbacks.set(i,then);
+                            var s = `r{a}:${{i}};{}`;
+                            (this.internal.sender)(s);
+                        }});
+                    }}"#,
+                    (0usize..*v).map(|a| format!("param{a}: Value")).join(","),
+                    (0usize..*v)
+                        .map(|a| format!("${{this.interial.allocate(param{a})}}"))
+                        .join(","),
+                ))
+                .join("\n")
+        )
+    );
+}
+pub fn launch(url: &str, path: &str, rpcs: &BTreeMap<String, usize>) -> String {
+    return format!("import WSDOMConnectWebSocket from '{path}'\nexport const WS = WSDOMConnectToServer('{url}')\n{}",rpcs.iter().map(|(a,_)|format!("export const {a} = WS.{a};")).join(";"));
 }

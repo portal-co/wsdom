@@ -22,7 +22,9 @@ async fn example(browser: &Browser, button: wsdom::dom::HTMLButtonElement) {
 ```
 */
 
-use std::{fmt::Write, marker::PhantomData, pin::Pin, task::Poll};
+use core::{fmt::Write, marker::PhantomData, pin::Pin, task::Poll};
+
+use alloc::{borrow::ToOwned, boxed::Box, string::String};
 
 use crate::{
     js::value::JsValue,
@@ -50,13 +52,13 @@ impl<E: JsCast> futures_core::Stream for Callback<E> {
 
     fn poll_next(
         self: Pin<&mut Self>,
-        cx: &mut std::task::Context<'_>,
+        cx: &mut core::task::Context<'_>,
     ) -> Poll<Option<Self::Item>> {
         let this = self.get_mut();
-        let mut link = this.browser.0.lock().unwrap();
+        let mut link = this.browser.0.lock();
         let ret_id = this.ret_id;
         match link.retrievals.entry(ret_id) {
-            std::collections::hash_map::Entry::Occupied(mut occ) => {
+           hashbrown::hash_map::Entry::Occupied(mut occ) => {
                 let state = occ.get_mut();
 
                 let new_waker = cx.waker();
@@ -82,7 +84,7 @@ impl<E: JsCast> futures_core::Stream for Callback<E> {
                     Poll::Pending
                 }
             }
-            std::collections::hash_map::Entry::Vacant(vac) => {
+          hashbrown::hash_map::Entry::Vacant(vac) => {
                 vac.insert(RetrievalState {
                     waker: cx.waker().to_owned(),
                     last_value: String::new(),
@@ -95,7 +97,7 @@ impl<E: JsCast> futures_core::Stream for Callback<E> {
 }
 impl<E> Drop for Callback<E> {
     fn drop(&mut self) {
-        let mut link = self.browser.0.lock().unwrap();
+        let mut link = self.browser.0.lock();
         let ret_id = self.ret_id;
         link.retrievals.remove(&ret_id);
         let arr_id = self.arr_id;
@@ -108,7 +110,7 @@ impl<E> Drop for Callback<E> {
 /// The returned Callback object is a stream. Every time the returned function is called,
 /// the stream will yield the call argument as value.
 pub fn new_callback<E>(browser: &Browser) -> (Callback<E>, JsValue) {
-    let mut link = browser.0.lock().unwrap();
+    let mut link = browser.0.lock();
     let arr_id = link.get_new_id();
     let ret_id = link.get_new_id();
     let func_id = link.get_new_id();

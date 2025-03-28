@@ -71,7 +71,7 @@ macro_rules! impl_number_op {
     };
 }
 
-use std::ops::*;
+use core::ops::*;
 impl_number_op!(Add, add, op_add);
 impl_number_op!(Sub, sub, op_sub);
 impl_number_op!(Mul, mul, op_mul);

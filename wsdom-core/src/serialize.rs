@@ -9,11 +9,11 @@ use crate::protocol::GET;
 ///
 /// This trait is used by [ToJs].
 pub trait UseInJsCode {
-    fn serialize_to(&self, buf: &mut std::fmt::Formatter<'_>) -> std::fmt::Result;
+    fn serialize_to(&self, buf: &mut core::fmt::Formatter<'_>) -> core::fmt::Result;
 }
 
 impl UseInJsCode for JsValue {
-    fn serialize_to(&self, buf: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn serialize_to(&self, buf: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let self_id = self.id;
         write!(buf, "{GET}({self_id})").unwrap();
         Ok(())
@@ -23,41 +23,22 @@ impl UseInJsCode for JsValue {
 pub struct SerdeToJs<'a, T: ?Sized>(pub &'a T);
 
 impl<'a, T: Serialize + ?Sized> UseInJsCode for SerdeToJs<'a, T> {
-    fn serialize_to(&self, buf: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        struct WriteAdapter<'a, 'b>(&'a mut std::fmt::Formatter<'b>);
-        impl<'a, 'b> std::io::Write for WriteAdapter<'a, 'b> {
-            fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
-                match self.0.write_str(unsafe {
-                    // WriteAdapter is only to be written to by serde_json,
-                    // which only writes valid utf8
-                    std::str::from_utf8_unchecked(buf)
-                }) {
-                    Ok(()) => Ok(buf.len()),
-                    Err(std::fmt::Error) => Err(std::io::ErrorKind::Other.into()),
-                }
-            }
-            fn flush(&mut self) -> std::io::Result<()> {
-                Ok(())
-            }
-        }
-        match serde_json::to_writer(&mut WriteAdapter(buf), self.0) {
-            Ok(()) => Ok(()),
-            Err(_) => Err(std::fmt::Error),
-        }
+    fn serialize_to(&self, buf: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        buf.write_str(&serde_json::to_string(&self.0).map_err(|_|core::fmt::Error)?)
     }
 }
 
 pub(crate) struct UseInJsCodeWriter<'a, T: UseInJsCode + ?Sized>(pub &'a T);
 
-impl<'a, T: UseInJsCode + ?Sized> std::fmt::Display for UseInJsCodeWriter<'a, T> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl<'a, T: UseInJsCode + ?Sized> core::fmt::Display for UseInJsCodeWriter<'a, T> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         self.0.serialize_to(f)
     }
 }
 
 pub struct RawCodeImmediate<'a>(pub &'a str);
 impl<'a> UseInJsCode for RawCodeImmediate<'a> {
-    fn serialize_to(&self, buf: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn serialize_to(&self, buf: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         buf.write_str(self.0)
     }
 }

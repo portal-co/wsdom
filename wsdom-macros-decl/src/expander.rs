@@ -1,9 +1,13 @@
+
 #[macro_export]
 macro_rules! expand_class_def {
     ($generics_for_phantom:ty, [$($impl_generics:tt)*], $name_without_bound:ty, $name:ident, [$($decl_generics:tt)*], $first_extend:ty, $($all_extends:ty,)*) => {
         #[derive(::core::clone::Clone, __wsdom_load_ts_macro::RefCast)]
         #[repr(transparent)]
         pub struct $name $($decl_generics)* (__wsdom_load_ts_macro::JsValue, ::core::marker::PhantomData<$generics_for_phantom> );
+
+        wsdom_core::wrap!([$($impl_generics)*] as (|v|$name(v,::core::marker::PhantomData)) => $name_without_bound);
+
         impl $($impl_generics)* __wsdom_load_ts_macro::JsCast for $name_without_bound
         {
             fn unchecked_from_js(val: __wsdom_load_ts_macro::JsValue) -> Self {
@@ -15,7 +19,7 @@ macro_rules! expand_class_def {
         }
         impl $($impl_generics)* __wsdom_load_ts_macro::UseInJsCode for $name_without_bound
         {
-            fn serialize_to(&self, buf: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            fn serialize_to(&self, buf: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
                 self.0.serialize_to(buf)
             }
         }
@@ -27,7 +31,7 @@ macro_rules! expand_class_def {
             }
         }
 
-        impl $($impl_generics)* std::ops::Deref for $name_without_bound
+        impl $($impl_generics)* ::core::ops::Deref for $name_without_bound
         {
             type Target = $first_extend;
             fn deref(&self) -> &Self::Target {

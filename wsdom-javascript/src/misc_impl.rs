@@ -1,4 +1,4 @@
-use std::future::IntoFuture;
+use core::future::IntoFuture;
 
 use crate::{Promise, PromiseLike};
 
@@ -21,7 +21,7 @@ macro_rules! promise_like {
             fn into_future(self) -> Self::IntoFuture {
                 Cast{
                     value: self.0.into_future(),
-                    phantom: std::marker::PhantomData,
+                    phantom: core::marker::PhantomData,
                 }
             }
         }

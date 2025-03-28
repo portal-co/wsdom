@@ -20,7 +20,8 @@ Note that this module is **incomplete**. I only auto-generated a small subset of
 
 The `js_types` module contains JavaScript primitives such as `number`, `string`, and `object`.
 */
-
+#![no_std]
+extern crate alloc;
 #[doc(hidden)]
 pub mod __wsdom_load_ts_macro {
     //! Private module for our macro. Don't use this.

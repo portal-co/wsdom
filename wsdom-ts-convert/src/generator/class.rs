@@ -73,10 +73,10 @@ impl<'a> Context<'a> {
                 });
                 (
                     quote! {
-                        #name: __wsdom_load_ts_macro::JsCast #(+ #bounds)*
+                        #name: __wsdom_load_ts_macro::JsCast  #(+ #bounds)*
                     },
                     quote! {
-                        #name: __wsdom_load_ts_macro::JsCast #(+ #bounds_cloned)* #default
+                        #name: __wsdom_load_ts_macro::JsCast  #(+ #bounds_cloned)* #default
                     },
                 )
             });

@@ -9,3 +9,4 @@ description = "for the wsdom crate"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+px-wsdom-core = { version = "0.0.2", path = "../wsdom-core" }

@@ -1,4 +1,4 @@
-use std::{future::Future, marker::PhantomData};
+use core::{future::Future, marker::PhantomData};
 
 use crate::js::value::JsValue;
 
@@ -47,9 +47,9 @@ impl<T: Future<Output: JsCast>, U: JsCast> Future for Cast<T, U> {
     type Output = U;
 
     fn poll(
-        self: std::pin::Pin<&mut Self>,
-        cx: &mut std::task::Context<'_>,
-    ) -> std::task::Poll<Self::Output> {
+        self: core::pin::Pin<&mut Self>,
+        cx: &mut core::task::Context<'_>,
+    ) -> core::task::Poll<Self::Output> {
         self.project().value.poll(cx).map(|a| a.unchecked_into())
     }
 }

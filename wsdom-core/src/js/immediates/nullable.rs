@@ -7,7 +7,7 @@ use crate::{
 pub struct NullImmediate;
 
 impl UseInJsCode for NullImmediate {
-    fn serialize_to(&self, buf: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn serialize_to(&self, buf: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         RawCodeImmediate("null").serialize_to(buf)
     }
 }
@@ -17,7 +17,7 @@ impl<T> ToJs<JsNullable<T>> for NullImmediate {}
 
 pub struct UndefinedImmediate;
 impl UseInJsCode for UndefinedImmediate {
-    fn serialize_to(&self, buf: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn serialize_to(&self, buf: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         RawCodeImmediate("undefined").serialize_to(buf)
     }
 }
@@ -36,7 +36,7 @@ pub const fn undefined() -> UndefinedImmediate {
 }
 
 impl<'a, T: UseInJsCode> UseInJsCode for Option<&'a T> {
-    fn serialize_to(&self, buf: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn serialize_to(&self, buf: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
             Some(t) => t.serialize_to(buf),
             None => NullImmediate.serialize_to(buf),

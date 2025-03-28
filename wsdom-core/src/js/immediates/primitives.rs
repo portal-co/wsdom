@@ -7,7 +7,7 @@ use crate::{
 macro_rules! impl_use_in_js {
     ($name:ident) => {
         impl UseInJsCode for $name {
-            fn serialize_to(&self, buf: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            fn serialize_to(&self, buf: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
                 SerdeToJs(self).serialize_to(buf)
             }
         }
@@ -20,7 +20,7 @@ impl_use_in_js!(bool);
 impl ToJs<JsString> for str {}
 impl_use_in_js!(str);
 impl<'a> UseInJsCode for &'a str {
-    fn serialize_to(&self, buf: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn serialize_to(&self, buf: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         SerdeToJs(self).serialize_to(buf)
     }
 }
