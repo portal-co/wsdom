@@ -1,6 +1,6 @@
 [package]
 name = "px-wsdom-gen"
-version = "0.0.2"
+version = "0.0.3"
 edition = "2021"
 license = "MPL-2.0"
 repository = "https://github.com/wishawa/wsdom"
