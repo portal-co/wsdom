@@ -1,6 +1,6 @@
 [package]
 name = "px-wsdom-javascript"
-version = "0.0.4"
+version = "0.0.5"
 edition = "2021"
 license = "MPL-2.0"
 repository = "https://github.com/wishawa/wsdom"
@@ -10,7 +10,7 @@ description = "for the wsdom crate"
 
 [dependencies]
 wsdom-macros = { path = "../wsdom-macros/", version = "0.0.3", package = "px-wsdom-macros"  }
-wsdom-macros-decl = { path = "../wsdom-macros-decl/", version = "0.0.4", package = "px-wsdom-macros-decl"  }
-wsdom-core = { path = "../wsdom-core/", version = "0.0.4", package = "px-wsdom-core"  }
+wsdom-macros-decl = { path = "../wsdom-macros-decl/", version = "0.0.5", package = "px-wsdom-macros-decl"  }
+wsdom-core = { path = "../wsdom-core/", version = "0.0.5", package = "px-wsdom-core"  }
 ref-cast = "1"
 serde = { version = "1" }

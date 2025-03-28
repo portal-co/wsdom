@@ -1,6 +1,6 @@
 [package]
 name = "px-wsdom-core"
-version = "0.0.4"
+version = "0.0.5"
 edition = "2021"
 license = "MPL-2.0"
 repository = "https://github.com/wishawa/wsdom"
@@ -10,7 +10,7 @@ description = "for the wsdom crate"
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
-serde_json = { version = "^1.0.140", default-features = false }
+serde_json = { version = "^1.0.140", default-features = false, features = ["alloc"] }
 ref-cast = "1"
 futures-core = { version = "0.3", default-features = false }
 pin-project-lite = "0.2.15"

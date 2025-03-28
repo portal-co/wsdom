@@ -611,7 +611,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "px-wsdom-core",
  "px-wsdom-dom",
@@ -624,7 +624,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-axum"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "axum",
  "futures-util",
@@ -634,7 +634,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-core"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "futures-core",
  "futures-util",
@@ -650,7 +650,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-dom"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "px-wsdom-core",
  "px-wsdom-javascript",
@@ -671,7 +671,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-javascript"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "px-wsdom-core",
  "px-wsdom-macros",
@@ -692,7 +692,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-macros-decl"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "px-wsdom-core",
 ]
