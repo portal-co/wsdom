@@ -611,7 +611,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom"
-version = "0.0.3"
+version = "0.0.4"
 dependencies = [
  "px-wsdom-core",
  "px-wsdom-dom",
@@ -624,7 +624,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-axum"
-version = "0.0.3"
+version = "0.0.4"
 dependencies = [
  "axum",
  "futures-util",
@@ -634,7 +634,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-core"
-version = "0.0.3"
+version = "0.0.4"
 dependencies = [
  "futures-core",
  "futures-util",
@@ -650,7 +650,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-dom"
-version = "0.0.3"
+version = "0.0.4"
 dependencies = [
  "px-wsdom-core",
  "px-wsdom-javascript",
@@ -671,7 +671,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-javascript"
-version = "0.0.3"
+version = "0.0.4"
 dependencies = [
  "px-wsdom-core",
  "px-wsdom-macros",
@@ -692,7 +692,7 @@ dependencies = [
 
 [[package]]
 name = "px-wsdom-macros-decl"
-version = "0.0.3"
+version = "0.0.4"
 dependencies = [
  "px-wsdom-core",
 ]
@@ -801,18 +801,18 @@ checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 
 [[package]]
 name = "serde"
-version = "1.0.188"
+version = "1.0.219"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf9e0fcba69a370eed61bcf2b728575f726b50b55cba78064753d708ddc7549e"
+checksum = "5f0e2c6ed6606019b4e29e69dbaba95b11854410e5347d525002456dbbb786b6"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.188"
+version = "1.0.219"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4eca7ac642d82aa35b60049a6eccb4be6be75e599bd2e9adb5f875a737654af2"
+checksum = "5b0276cf7f2c73365f7157c8123c21cd9a50fbbd844757af28ca1f5925fc2a00"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -821,11 +821,12 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.105"
+version = "1.0.140"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "693151e1ac27563d6dbcec9dee9fbd5da8539b20fa14ad3752b2e6d363ace360"
+checksum = "20068b6e96dc6c9bd23e01df8827e6c7e1f2fddd43c21810382803c136b99373"
 dependencies = [
  "itoa",
+ "memchr",
  "ryu",
  "serde",
 ]
