@@ -1,6 +1,6 @@
 [package]
 name = "px-wsdom-macros-decl"
-version = "0.0.5"
+version = "0.0.6"
 edition = "2021"
 license = "MPL-2.0"
 repository = "https://github.com/wishawa/wsdom"
@@ -9,4 +9,4 @@ description = "for the wsdom crate"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-px-wsdom-core = { version = "0.0.5", path = "../wsdom-core" }
+px-wsdom-core = { version = "0.0.6", path = "../wsdom-core" }

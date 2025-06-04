@@ -1,6 +1,6 @@
 [package]
 name = "px-wsdom-ts-convert"
-version = "0.0.3"
+version = "0.0.6"
 edition = "2021"
 license = "MPL-2.0"
 repository = "https://github.com/wishawa/wsdom"
@@ -12,4 +12,4 @@ description = "for the wsdom crate"
 winnow = "0.5.17"
 proc-macro2 = "1"
 quote = "1"
-px-wsdom-ts-parse = { version = "0.0.3", path = "../wsdom-ts-parse" }
+px-wsdom-ts-parse = { version = "0.0.6", path = "../wsdom-ts-parse" }

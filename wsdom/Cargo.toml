@@ -1,6 +1,6 @@
 [package]
 name = "px-wsdom"
-version = "0.0.5"
+version = "0.0.6"
 edition = "2021"
 description = "roundtrip-free Rust to JavaScript *remote method invocation* or *distributed objects* system"
 license = "MPL-2.0"
@@ -13,10 +13,10 @@ readme = "README.md"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-wsdom-macros = { path = "../wsdom-macros/", version = "0.0.3", package = "px-wsdom-macros"  }
-wsdom-macros-decl = { path = "../wsdom-macros-decl/", version = "0.0.5", package = "px-wsdom-macros-decl"  }
-wsdom-core = { path = "../wsdom-core/", version = "0.0.5", package = "px-wsdom-core" }
-wsdom-javascript = { path = "../wsdom-javascript/", version = "0.0.5", package = "px-wsdom-javascript"  }
-wsdom-dom = { path = "../wsdom-dom/", version = "0.0.5", package = "px-wsdom-dom"  }
+wsdom-macros = { path = "../wsdom-macros/", version = "0.0.6", package = "px-wsdom-macros"  }
+wsdom-macros-decl = { path = "../wsdom-macros-decl/", version = "0.0.6", package = "px-wsdom-macros-decl"  }
+wsdom-core = { path = "../wsdom-core/", version = "0.0.6", package = "px-wsdom-core" }
+wsdom-javascript = { path = "../wsdom-javascript/", version = "0.0.6", package = "px-wsdom-javascript"  }
+wsdom-dom = { path = "../wsdom-dom/", version = "0.0.6", package = "px-wsdom-dom"  }
 ref-cast = "1"
 serde = { version = "1" }
