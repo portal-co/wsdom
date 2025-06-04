@@ -54,4 +54,4 @@ where
 {
 }
 
-impl<T: ?Sized> ToJs<T> for T where T: UseInJsCode {}
+impl<T> ToJs<T> for T where T: UseInJsCode {}
