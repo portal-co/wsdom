@@ -38,7 +38,6 @@ export class WSDOM {
 		const fn = new Function('_w', msg);
 		fn(this.internal);
 	}
-    #e
 }
 export class WSDOMCore{
 	public sender: SendMessage;
