@@ -29,26 +29,21 @@ export function WSDOMConnectWebSocket(wsUrl: string | URL, wsProtocols?: string 
 	}
     return wsdom;
 }
-export class WSDOM {
-	public internal: WSDOMCore;
-	constructor(sendMessage: SendMessage) {
-		this.internal = new WSDOMCore(sendMessage);
-	}
-	public handleIncomingMessage(msg: string) {
-		const fn = new Function('_w', msg);
-		fn(this.internal);
-	}
-}
-export class WSDOMCore{
+export class WSDOM{
 	public sender: SendMessage;
 	#values: Map<Id, { value: Value, error: boolean }>;
     public callbacks: Map<Id,(value: Value) => void>;
     #next_value: Id;
+    public handleIncomingMessage(msg: string) {
+		const fn = new Function('_w', msg);
+		fn(this);
+	}
 	constructor(sender: SendMessage) {
 		this.sender = sender;
 		this.#values = new Map();
         this.callbacks = new Map();
         this.#next_value = Number.MAX_SAFE_INTEGER;
+        Object.freeze(this);
 	}
     public allocate = (v: Value): Id => {
         var i = this.#next_value;
@@ -92,7 +87,13 @@ export class WSDOMCore{
 	public e = (id: Id, value: Value) => {
 		this.#values.set(id, { value, error: true })
 	}
-    public x: {[key: string]: Value} = {#x};
+    public x: {[key: string]: Value} = {~x};
+    ~e
+
+    static{
+    Object.freeze(WSDOM.prototype);
+    Object.freeze(WSDOM);
+    }
 }
 "#;
     return format!(
@@ -103,7 +104,7 @@ export class WSDOMCore{
             .map(|(i, m)| format!("import * as m{i} from '{m}'"))
             .join("\n"),
         S.replace(
-            "#x",
+            "~x",
             &modules
                 .iter()
                 .enumerate()
@@ -114,22 +115,22 @@ export class WSDOMCore{
                 .join(",")
         )
         .replace(
-            "#e",
+            "~e",
             &rpcs
                 .iter()
                 .map(|(a, v)| format!(
-                    r#"public {a} = ({}): Promise<Value> => {{
+                    r#"public {a}({}): Promise<Value>{{
                         return new Promise((then) => {{
                             var i = 0;
-                            while(this.internal.callbacks.contains(i))i++;
-                            this.internal.callbacks.set(i,then);
+                            while(this.callbacks.contains(i))i++;
+                            this.callbacks.set(i,then);
                             var s = `r{a}:${{i}};{}`;
-                            (this.internal.sender)(s);
+                            (this.sender)(s);
                         }});
                     }}"#,
                     (0usize..*v).map(|a| format!("param{a}: Value")).join(","),
                     (0usize..*v)
-                        .map(|a| format!("${{this.interial.allocate(param{a})}}"))
+                        .map(|a| format!("${{this.allocate(param{a})}}"))
                         .join(","),
                 ))
                 .join("\n")
