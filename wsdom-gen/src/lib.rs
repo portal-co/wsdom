@@ -42,24 +42,24 @@ export class WSDOM {
 }
 export class WSDOMCore{
 	public sender: SendMessage;
-	private values: Map<Id, { value: Value, error: boolean }>;
+	#values: Map<Id, { value: Value, error: boolean }>;
     public callbacks: Map<Id,(value: Value) => void>;
-    private next_value: Id;
+    #next_value: Id;
 	constructor(sender: SendMessage) {
 		this.sender = sender;
-		this.values = new Map();
+		this.#values = new Map();
         this.callbacks = new Map();
-        this.next_value = Number.MAX_SAFE_INTEGER;
+        this.#next_value = Number.MAX_SAFE_INTEGER;
 	}
     public allocate = (v: Value): Id => {
-        var i = this.next_value;
-        this.next_value--;
-        this.values.set(i,{value: v, error: false});
+        var i = this.#next_value;
+        this.#next_value--;
+        this.#values.set(i,{value: v, error: false});
         return i;
     }
     public a = this.allocate;
 	public g = (id: Id): Value => {
-		var w = this.values.get(id);
+		var w = this.#values.get(id);
 		if (w?.error) {
 			throw w.value
 		} else {
@@ -67,10 +67,10 @@ export class WSDOMCore{
 		}
 	}
 	public s = (id: Id, value: Value) => {
-		this.values.set(id, { value, error: false });
+		this.#values.set(id, { value, error: false });
 	}
 	public d = (id: Id) => {
-		this.values.delete(id);
+		this.#values.delete(id);
 	}
 	public r = (id: Id, val: Value) => {
 		const valJson = JSON.stringify(val);
@@ -83,7 +83,7 @@ export class WSDOMCore{
         }
 	}
 	public c = (id: Id): {value: Value} | {slot: Id} | undefined  => {
-		var w = this.values.get(id);
+		var w = this.#values.get(id);
 		if(w?.error){
 			return {slot: this.allocate(w.value)};
 		}else{
@@ -91,7 +91,7 @@ export class WSDOMCore{
 		}
 	}
 	public e = (id: Id, value: Value) => {
-		this.values.set(id, { value, error: true })
+		this.#values.set(id, { value, error: true })
 	}
     public x: {[key: string]: Value} = {#x};
 }
