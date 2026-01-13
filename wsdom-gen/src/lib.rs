@@ -31,15 +31,15 @@ pub fn gen<D: Display>(modules: &[D], rpcs: &BTreeMap<String, usize>) -> String 
                     r#"public {a}({}): Promise<Value>{{
                         return new Promise((then) => {{
                             var i = 0;
-                            while(this.callbacks.contains(i))i++;
-                            this.callbacks.set(i,then);
+                            while(this.#callbacks.contains(i))i++;
+                            this.#callbacks.set(i,then);
                             var s = `r{a}:${{i}};{}`;
-                            (this.sender)(s);
+                            (this.#sender)(s);
                         }});
                     }}"#,
                     (0usize..*v).map(|a| format!("param{a}: Value")).join(","),
                     (0usize..*v)
-                        .map(|a| format!("${{this.allocate(param{a})}}"))
+                        .map(|a| format!("${{this.#allocate(param{a})}}"))
                         .join(","),
                 ))
                 .join("\n")

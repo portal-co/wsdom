@@ -24,29 +24,29 @@ export function WSDOMConnectWebSocket(wsUrl: string | URL, wsProtocols?: string 
     return wsdom;
 }
 export class WSDOM{
-	public sender: SendMessage;
+	#sender: SendMessage;
 	#values: Map<Id, { value: Value, error: boolean }>;
-    public callbacks: Map<Id,(value: Value) => void>;
+    #callbacks: Map<Id,(value: Value) => void>;
     #next_value: Id;
     public handleIncomingMessage(msg: string) {
 		const fn = new Function('_w', msg);
-		fn(this);
+		fn(this.#api);
 	}
 	constructor(sender: SendMessage) {
-		this.sender = sender;
+		this.#sender = sender;
 		this.#values = new Map();
-        this.callbacks = new Map();
+        this.#callbacks = new Map();
         this.#next_value = Number.MAX_SAFE_INTEGER;
         Object.freeze(this);
 	}
-    public allocate (v: Value): Id {
+    #allocate (v: Value): Id {
         var i = this.#next_value;
         this.#next_value--;
         this.#values.set(i,{value: v, error: false});
         return i;
     }
-    public a = this.allocate;
-	public g (id: Id): Value {
+    #a = this.#allocate;
+	#g (id: Id): Value {
 		var w = this.#values.get(id);
 		if (w?.error) {
 			throw w.value
@@ -54,34 +54,47 @@ export class WSDOM{
 			return w?.value
 		}
 	}
-	public s (id: Id, value: Value) {
+	#s (id: Id, value: Value) {
 		this.#values.set(id, { value, error: false });
 	}
-	public d (id: Id) {
+	#d (id: Id) {
 		this.#values.delete(id);
 	}
-	public r (id: Id, val: Value) {
+	#r (id: Id, val: Value) {
 		const valJson = JSON.stringify(val);
-		(this.sender)(`p${id}:${valJson}`);
+		(this.#sender)(`p${id}:${valJson}`);
 	}
-    public rp (id: Id, val: Value) {
-        var cb = this.callbacks.get(id);
+    #rp (id: Id, val: Value) {
+        var cb = this.#callbacks.get(id);
         if(cb !== undefined){
             cb(val)
         }
 	}
-	public c (id: Id): {value: Value} | {slot: Id} | undefined  {
+	#c (id: Id): {value: Value} | {slot: Id} | undefined  {
 		var w = this.#values.get(id);
 		if(w?.error){
-			return {slot: this.allocate(w.value)};
+			return {slot: this.#allocate(w.value)};
 		}else{
 			return {value: w?.value}
 		}
 	}
-	public e (id: Id, value: Value) {
+	#e (id: Id, value: Value) {
 		this.#values.set(id, { value, error: true })
 	}
-    public x: {[key: string]: Value} = Object.freeze({__proto__: null, $$x});
+    #x: {[key: string]: Value} = Object.freeze({__proto__: null, $$x});
+
+    #api = Object.freeze({
+        __proto__: null,
+        a: this.#a.bind(this),
+        g: this.#g.bind(this),
+        s: this.#s.bind(this),
+        d: this.#d.bind(this),
+        r: this.#r.bind(this),
+        rp: this.#rp.bind(this),
+        c: this.#c.bind(this),
+        e: this.#e.bind(this),
+        x: this.#x,
+    });
 
     static{
         Object.freeze(WSDOM.prototype);
