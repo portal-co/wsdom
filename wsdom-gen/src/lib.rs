@@ -33,7 +33,7 @@ pub fn gen<D: Display>(modules: &[D], rpcs: &BTreeMap<String, usize>) -> String 
                             var i = 0;
                             while(this.#callbacks.has(i))i++;
                             this.#callbacks.set(i,then);
-                            var s = `r{a}:${{i}};{}`;
+                            var s = `r{a}:${{i}};{};`;
                             (this.#sender)(s);
                         }});
                     }}"#,
