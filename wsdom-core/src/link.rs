@@ -1,5 +1,8 @@
 use alloc::{
-    borrow::ToOwned, collections::{BTreeMap, VecDeque}, string::String, sync::Arc
+    borrow::ToOwned,
+    collections::{BTreeMap, VecDeque},
+    string::String,
+    sync::Arc,
 };
 use core::task::{Poll, Waker};
 use hashbrown::HashMap;
@@ -130,9 +133,9 @@ impl Stream for RpcCellAM {
         };
 
         let new_waker = cx.waker();
-        if !lock.waker.will_wake(new_waker) {
-            lock.waker = new_waker.to_owned();
-        };
+        // if !lock.waker.will_wake(new_waker) {
+        lock.waker = new_waker.to_owned();
+        // };
 
         return Poll::Pending;
     }
