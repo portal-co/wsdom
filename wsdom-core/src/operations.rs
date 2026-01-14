@@ -240,16 +240,12 @@ impl Browser {
                 )
                 .unwrap();
                 link.wake_outgoing();
-                let out = JsValue {
-                    id: out_id,
-                    browser,
-                };
-                link.imports.insert(name.to_owned(), out.clone());
-                out
+                link.imports.insert(name.to_owned(), out_id.clone());
+                out_id
             }
             Some(a) => a,
         };
-        return a;
+        return JsValue { id: a, browser };
     }
 }
 

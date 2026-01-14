@@ -148,7 +148,7 @@ pub struct BrowserInternal {
     commands_buf: String,
     outgoing_waker: Option<Waker>,
     dead: ErrorState,
-    pub(crate) imports: BTreeMap<String, JsValue>,
+    pub(crate) imports: BTreeMap<String, u64>,
     pub(crate) rpc_state: BTreeMap<String, RpcCellAM>,
     pub(crate) pure_values: BTreeMap<String, JsValue>,
 }
