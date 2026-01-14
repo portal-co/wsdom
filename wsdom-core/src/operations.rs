@@ -228,6 +228,7 @@ impl Browser {
 
     /// Gets an import from the available ones
     pub fn import(&self, name: &str) -> JsValue {
+        let browser = self.clone();
         let mut link = self.0.lock();
         let a = match link.imports.get(name).cloned() {
             None => {
@@ -241,7 +242,7 @@ impl Browser {
                 link.wake_outgoing();
                 let out = JsValue {
                     id: out_id,
-                    browser: self.to_owned(),
+                    browser,
                 };
                 link.imports.insert(name.to_owned(), out.clone());
                 out
