@@ -31,7 +31,7 @@ pub fn gen<D: Display>(modules: &[D], rpcs: &BTreeMap<String, usize>) -> String 
                     r#"public {a}({}): Promise<Value>{{
                         return new Promise((then) => {{
                             var i = 0;
-                            while(this.#callbacks.contains(i))i++;
+                            while(this.#callbacks.has(i))i++;
                             this.#callbacks.set(i,then);
                             var s = `r{a}:${{i}};{}`;
                             (this.#sender)(s);
