@@ -43,7 +43,7 @@ impl Future for Await {
                     let cell_id = this.cell_id;
                     writeln!(
                         link.raw_commands_buf(),
-                        "{{var v = {GET}({cell_id}).$);(v.r?{ERR}:{SET})({val_id}, v.e), {DEL}({cell_id})}}}};"
+                        "{{var v = {GET}({cell_id}).$;(v.r?{ERR}:{SET})({val_id}, v.e);{DEL}({cell_id});}};"
                     )
                     .unwrap();
                     link.wake_outgoing_lazy();
@@ -78,7 +78,7 @@ impl IntoFuture for JsValue {
         let id = self.id;
         writeln!(
             link.raw_commands_buf(),
-            "{SET}({cell_id},{{}}); try{{Promise.prototype.then.call({GET}({id}),function(e) {{{GET}({cell_id}).$ = {{e,r:0}}; {REP}({ret_id}, 0) }},function(e) {{{GET}({cell_id}).$ = {{e,r:1}}; {REP}({ret_id}, 0) }}))}}catch($){{{GET}({cell_id}).$ = {{e:e,r:1}}; {REP}({ret_id}, 0)}};"
+            "{SET}({cell_id},{{}}); try{{Promise.prototype.then.call({GET}({id}),function(e) {{{GET}({cell_id}).$ = {{e,r:0}}; {REP}({ret_id}, 0) }},function(e) {{{GET}({cell_id}).$ = {{e,r:1}}; {REP}({ret_id}, 0) }})}}catch($){{{GET}({cell_id}).$ = {{e:e,r:1}}; {REP}({ret_id}, 0)}};"
         )
         .unwrap();
         link.wake_outgoing_lazy();
