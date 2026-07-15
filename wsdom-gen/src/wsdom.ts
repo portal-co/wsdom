@@ -37,15 +37,17 @@ export class WSDOM{
 	#values: Map<Id, { value: Value, error: boolean }>;
     #callbacks: Map<Id,(value: Value) => void>;
     #next_value: Id;
+	#args: $$a;
     public handleIncomingMessage(msg: string) {
 		const fn = new Function('_w', msg);
 		fn(this.#api);
 	}
-	constructor(sender: SendMessage) {
+	constructor(sender: SendMessage, args: $$a) {
 		this.#sender = sender;
 		this.#values = new Map();
         this.#callbacks = new Map();
         this.#next_value = Number.MAX_SAFE_INTEGER;
+		this.#args = $$a;
         Object.freeze(this);
 	}
     #allocate (v: Value): Id {
@@ -90,7 +92,7 @@ export class WSDOM{
 	#e (id: Id, value: Value) {
 		this.#values.set(id, { value, error: true })
 	}
-    #x: {[key: string]: Value} = Object.freeze({__proto__: null, $$x});
+    #x: {[key: string]: Value} = (self => Object.freeze({__proto__: null, $$x}))(this);
 
     #api = Object.freeze({
         __proto__: null,
