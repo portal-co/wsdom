@@ -58,7 +58,7 @@ impl<E: JsCast> futures_core::Stream for Callback<E> {
         let mut link = this.browser.0.lock();
         let ret_id = this.ret_id;
         match link.retrievals.entry(ret_id) {
-           hashbrown::hash_map::Entry::Occupied(mut occ) => {
+            hashbrown::hash_map::Entry::Occupied(mut occ) => {
                 let state = occ.get_mut();
 
                 let new_waker = cx.waker();
@@ -84,7 +84,7 @@ impl<E: JsCast> futures_core::Stream for Callback<E> {
                     Poll::Pending
                 }
             }
-          hashbrown::hash_map::Entry::Vacant(vac) => {
+            hashbrown::hash_map::Entry::Vacant(vac) => {
                 vac.insert(RetrievalState {
                     waker: cx.waker().to_owned(),
                     last_value: String::new(),

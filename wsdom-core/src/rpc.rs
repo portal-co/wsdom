@@ -5,7 +5,7 @@ use core::task::Poll;
 use futures_core::Stream;
 
 use crate::js_types::JsValue;
-use crate::{link::RpcCellAM, serialize::UseInJsCodeWriter, Browser, UseInJsCode};
+use crate::{Browser, UseInJsCode, link::RpcCellAM, serialize::UseInJsCodeWriter};
 
 use crate::protocol::REPLY;
 use core::fmt::Write;

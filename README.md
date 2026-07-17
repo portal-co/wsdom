@@ -89,6 +89,13 @@ WSDOM and jsdom are similar in that we both expose the web browser's API outside
 jsdom does so by implementing the API themselves.
 WSDOM does so by forwarding calls to a real web browser running across a WebSocket connection.
 
+## Configurable protocol member names
+
+WSDOM's private `_w` protocol object can use a complete, consistent
+property-mangled name scheme. Existing callers retain canonical protocol
+spelling; configurable source emitters must use the safe resolver helpers.
+See [`PROTOCOL_HOST_METHOD_NAMES.md`](PROTOCOL_HOST_METHOD_NAMES.md).
+
 ## Details
 The [How It Works](how-it-works.md) document describes how WSDOM works in more details.
 

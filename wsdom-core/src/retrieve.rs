@@ -1,17 +1,17 @@
-use core::marker::PhantomData;
 use alloc::borrow::ToOwned;
 use alloc::boxed::Box;
 use alloc::string::String;
-use spin::Mutex;
+use core::marker::PhantomData;
 use core::{fmt::Write, future::Future, pin::Pin, task::Poll};
+use spin::Mutex;
 
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 
+use crate::Browser;
 use crate::js_types::JsValue;
 use crate::link::{BrowserInternal, Error, RetrievalState};
-use crate::protocol::{GET, REP, CATCH};
-use crate::Browser;
+use crate::protocol::{CATCH, GET, REP};
 
 /// A [Future] for retrieving value from the JS side to the Rust side.
 ///
@@ -35,18 +35,14 @@ impl<'a, T: DeserializeOwned> RetrieveFuture<'a, T> {
         }
     }
 }
-#[derive(Serialize,Deserialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(untagged)]
-enum ResI<T>{
-    Value{
-        value: T
-    },
-    Error{
-        error: u64
-    }
+enum ResI<T> {
+    Value { value: T },
+    Error { error: u64 },
 }
 impl<'a, T: DeserializeOwned> Future for RetrieveFuture<'a, T> {
-    type Output = Result<T,JsValue>;
+    type Output = Result<T, JsValue>;
     fn poll(self: Pin<&mut Self>, cx: &mut core::task::Context<'_>) -> Poll<Self::Output> {
         let this = self.get_mut();
         let mut link = this.link.0.lock();
@@ -57,7 +53,11 @@ impl<'a, T: DeserializeOwned> Future for RetrieveFuture<'a, T> {
                 let this_id = this.id;
                 // this.error_slot = link.get_new_id();
                 // let error_slot = this.error_slot;
-                writeln!(link.raw_commands_buf(), "{REP}({ret_id},{CATCH}({this_id}));").unwrap();
+                writeln!(
+                    link.raw_commands_buf(),
+                    "{REP}({ret_id},{CATCH}({this_id}));"
+                )
+                .unwrap();
                 link.wake_outgoing();
                 link.retrievals.insert(
                     ret_id,
@@ -86,9 +86,12 @@ impl<'a, T: DeserializeOwned> Future for RetrieveFuture<'a, T> {
                         let v = v.split_once(':').unwrap().1;
                         match serde_json::from_str(v) {
                             Ok(v) => {
-                                let v = match v{
+                                let v = match v {
                                     ResI::Value { value } => Ok(value),
-                                    ResI::Error { error } => Err(JsValue { id: error, browser: this.link.clone() }),
+                                    ResI::Error { error } => Err(JsValue {
+                                        id: error,
+                                        browser: this.link.clone(),
+                                    }),
                                 };
                                 this.ret_id = 0;
                                 Poll::Ready(v)

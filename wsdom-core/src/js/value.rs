@@ -11,7 +11,6 @@ pub struct JsValue {
     pub(crate) browser: Browser,
 }
 
-
 impl Drop for JsValue {
     fn drop(&mut self) {
         let self_id = self.id;

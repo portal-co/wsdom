@@ -12,7 +12,14 @@ mod rpc;
 mod serialize;
 
 pub use link::{Browser, Error, RpcCellAM};
-pub use rpc::{Endpoint, Reply, Request, RpcDeserialize, RpcHandle, Lock};
+/// Protocol-member name resolution for hosts that property-mangle WSDOM's
+/// private `_w` runtime object.
+pub mod protocol_names {
+    pub use super::protocol::{
+        WsdomMethod, call, member, protocol_call_with_names, validate_host_method_names,
+    };
+}
+pub use rpc::{Endpoint, Lock, Reply, Request, RpcDeserialize, RpcHandle};
 
 pub mod js_types {
     //! Stubs for primitive JS types including number, string, null, undefined, object.
@@ -23,8 +30,8 @@ pub mod js_types {
         value::JsValue,
     };
 }
-pub use interaction::callback;
 pub use interaction::r#await;
+pub use interaction::callback;
 pub use js_cast::{Cast, JsCast};
 pub use serialize::{ToJs, UseInJsCode};
 pub mod immediates {

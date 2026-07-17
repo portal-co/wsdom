@@ -1,11 +1,11 @@
 use crate::{
+    Endpoint, RpcHandle,
     js::{object::JsObject, value::JsValue},
     js_cast::JsCast,
     link::{Browser, Error, RpcCell},
     protocol::{ERR, GET, IMPORT, SET},
     retrieve::RetrieveFuture,
     serialize::{ToJs, UseInJsCode, UseInJsCodeWriter},
-    Endpoint, RpcHandle,
 };
 use alloc::{borrow::ToOwned, sync::Arc};
 use core::{

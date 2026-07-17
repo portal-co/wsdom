@@ -24,7 +24,7 @@ pub struct SerdeToJs<'a, T: ?Sized>(pub &'a T);
 
 impl<'a, T: Serialize + ?Sized> UseInJsCode for SerdeToJs<'a, T> {
     fn serialize_to(&self, buf: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        buf.write_str(&serde_json::to_string(&self.0).map_err(|_|core::fmt::Error)?)
+        buf.write_str(&serde_json::to_string(&self.0).map_err(|_| core::fmt::Error)?)
     }
 }
 

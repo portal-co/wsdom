@@ -19,6 +19,7 @@ hex = "0.4.3"
 futures-util = "0.3.31"
 spin = "0.10.0"
 hashbrown = { version = "0.15.2", features = ["default-hasher"] }
+portal-jit-host-names = { path = "../../codegen-utils/crates/host-method-names" }
 
 [dev-dependencies]
 # wsdom = { path = "../wsdom/", packege = "px-wsdom" }
