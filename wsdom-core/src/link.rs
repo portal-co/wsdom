@@ -56,6 +56,13 @@ impl Browser {
         };
         Self(Arc::new(Mutex::new(link)))
     }
+    /// Returns whether two browser handles represent the same WSDOM connection.
+    ///
+    /// Remote value IDs are meaningful only within this connection; hosts using
+    /// more than one Browser must validate values before interpolating them.
+    pub fn same_connection(&self, other: &Self) -> bool {
+        Arc::ptr_eq(&self.0, &other.0)
+    }
     /// Receive a message sent from the WSDOM JS client.
     ///
     /// This is only needed if you intend to go the "manual" route described above.

@@ -37,15 +37,17 @@ export class WSDOM{
 	#values: Map<Id, { value: Value, error: boolean }>;
     #callbacks: Map<Id,(value: Value) => void>;
     #next_value: Id;
-    public handleIncomingMessage(msg: string) {
-		const fn = new Function('_w', msg);
-		fn(this.#api);
+	#Function: {new(w: "_w", msg: string): (api: any) => any};
+    public async handleIncomingMessage(msg: string) {
+		const fn = new this.#Function('_w', msg);
+		await fn(this.#api);
 	}
-	constructor(sender: SendMessage) {
+	constructor(sender: SendMessage, Function: { new(w: "_w", msg: string): (api: any) => any } = globalThis.Function as any) {
 		this.#sender = sender;
 		this.#values = new Map();
         this.#callbacks = new Map();
         this.#next_value = Number.MAX_SAFE_INTEGER;
+		this.#Function = Function;
         Object.freeze(this);
 	}
     #allocate (v: Value): Id {
