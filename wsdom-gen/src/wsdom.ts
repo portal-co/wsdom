@@ -42,12 +42,14 @@ export class WSDOM{
 		const fn = new this.#Function('_w', msg);
 		await fn(this.#api);
 	}
-	constructor(sender: SendMessage, Function: { new(w: "_w", msg: string): (api: any) => any } = globalThis.Function as any) {
+		#args: $$a;
+	constructor(sender: SendMessage, args: $$a, Function: { new(w: "_w", msg: string): (api: any) => any } = globalThis.Function as any) {
 		this.#sender = sender;
 		this.#values = new Map();
         this.#callbacks = new Map();
         this.#next_value = Number.MAX_SAFE_INTEGER;
 		this.#Function = Function;
+		this.#args = $$a;
         Object.freeze(this);
 	}
     #allocate (v: Value): Id {
@@ -92,7 +94,7 @@ export class WSDOM{
 	#e (id: Id, value: Value) {
 		this.#values.set(id, { value, error: true })
 	}
-    #x: {[key: string]: Value} = Object.freeze({__proto__: null, $$x});
+    #x: {[key: string]: Value} = (self => Object.freeze({__proto__: null, $$x}))(this);
 
     #api = Object.freeze({
         __proto__: null,

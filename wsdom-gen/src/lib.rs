@@ -2,25 +2,47 @@ use std::{collections::BTreeMap, fmt::Display};
 
 use itertools::Itertools;
 use sha3::Digest;
-pub fn gen<D: Display>(modules: &[D], rpcs: &BTreeMap<String, usize>) -> String {
-    let modules = modules.iter().map(|a| format!("{a}")).collect_vec();
+pub struct Module<D> {
+    pub name: D,
+    pub kind: ModuleKind,
+}
+pub enum ModuleKind {
+    Injected,
+    ESM,
+}
+pub fn gen<D: Display>(modules: &[Module<D>], rpcs: &BTreeMap<String, usize>) -> String {
+    let modules2 = modules
+        .iter()
+        .map(|a| format!("{a}", a = &a.name))
+        .collect_vec();
     const S: &str = include_str!("wsdom.ts");
     return format!(
         "{}\n{}",
-        modules
+        modules2
             .iter()
+            .zip(modules.iter())
             .enumerate()
-            .map(|(i, m)| format!("import * as m{i} from '{m}'"))
+            .map(|(i, (m, Module { name, kind }))| match kind {
+                ModuleKind::Injected => format!(""),
+                ModuleKind::ESM => format!("import * as m{i} from '{m}'"),
+            })
             .join("\n"),
         S.replace(
             "$$x",
-            &modules
+            &modules2
                 .iter()
+                .zip(modules.iter())
                 .enumerate()
-                .map(|(i, m)| format!(
-                    "_{} :m{i} as Value",
-                    hex::encode(&sha3::Sha3_256::digest(m.as_bytes()))
-                ))
+                .map(|(i, (m, Module { name, kind }))| match kind {
+                    ModuleKind::Injected => format!(
+                        "get _{}(){{return self.#args.{name};}}",
+                        hex::encode(&sha3::Sha3_256::digest(m.as_bytes()))
+                    ),
+                    ModuleKind::ESM => format!(
+                        "_{} :m{i} as Value",
+                        hex::encode(&sha3::Sha3_256::digest(m.as_bytes()))
+                    ),
+                })
                 .join(",")
         )
         .replace(
@@ -43,6 +65,19 @@ pub fn gen<D: Display>(modules: &[D], rpcs: &BTreeMap<String, usize>) -> String 
                         .join(","),
                 ))
                 .join("\n")
+        )
+        .replace(
+            "$$a",
+            &format!(
+                "{{{}}}",
+                modules
+                    .iter()
+                    .filter_map(|Module { name, kind }| match kind {
+                        ModuleKind::Injected => Some(format!("{name}: unknown")),
+                        ModuleKind::ESM => None,
+                    })
+                    .join(",")
+            )
         )
     );
 }
