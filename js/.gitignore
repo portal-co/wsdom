@@ -1,2 +1,4 @@
 node_modules/
 *.js
+!transport.js
+.test-dist/

@@ -5,27 +5,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
-	<script>
-		function WSDOMConnectWebSocket(wsUrl, wsProtocols) {
-			const ws = new WebSocket(wsUrl, wsProtocols);
-			const wsdom = new WSDOM((msg) => {
-				ws.send(msg);
-			});
-			ws.onopen = () => {
-				console.debug("WSDOM WebSocket connection open!");
-				console.debug("WebSocket object", ws);
-				console.debug("WSDOM object", wsdom);
-			};
-			ws.onmessage = (msg) => {
-				wsdom.handleIncomingMessage(msg.data);
-			};
-			ws.onclose = (ev) => {
-				console.debug("WSDOM WebSocket closed", ev);
-			};
-			ws.onerror = (ev) => {
-				console.warn("WSDOM WebSocket errored", ev);
-			};
-		}
+	<script type="module">
+		import { WSDOMTransport } from "/transport.js";
 		class WSDOM {
 			constructor(sendMessage) {
 				this.internal = new WSDOMInternal(sendMessage);
@@ -54,7 +35,10 @@
 				this.values = new Map();
 			}
 		}
-		WSDOMConnectWebSocket("ws://localhost:4000/ws");
+		const transport = new WSDOMTransport(WSDOM, [], {
+			transport: { kind: "websocket", url: "ws://localhost:4000/ws" },
+		});
+		void transport.start();
 	</script>
 </head>
 

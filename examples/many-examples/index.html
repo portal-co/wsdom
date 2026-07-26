@@ -5,33 +5,12 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>WSDOM Demo</title>
-	<script>
+	<script type="module">
+		import { WSDOMTransport } from "/transport.js";
+
 		function setConnectingLabel(text) {
 			const conLabelUi = document.getElementById("connecting-label");
 			if (conLabelUi) conLabelUi.innerText = text;
-		}
-		function WSDOMConnectWebSocket(wsUrl, wsProtocols) {
-			const ws = new WebSocket(wsUrl, wsProtocols);
-			const wsdom = new WSDOM((msg) => {
-				ws.send(msg);
-			});
-			ws.onopen = () => {
-				console.debug("WSDOM WebSocket connection open!");
-				console.debug("WebSocket object", ws);
-				console.debug("WSDOM object", wsdom);
-				setConnectingLabel("Connected to WSDOM server.");
-			};
-			ws.onmessage = (msg) => {
-				wsdom.handleIncomingMessage(msg.data);
-			};
-			ws.onclose = (ev) => {
-				console.debug("WSDOM WebSocket closed", ev);
-				setConnectingLabel("Disconnected from WSDOM server. Try refreshing the page.");
-			};
-			ws.onerror = (ev) => {
-				console.warn("WSDOM WebSocket errored", ev);
-				setConnectingLabel("WebSocket error. Try refreshing the page.");
-			};
 		}
 		class WSDOM {
 			constructor(sendMessage) {
@@ -61,7 +40,15 @@
 				this.values = new Map();
 			}
 		}
-		WSDOMConnectWebSocket(window.location.href.replace('http://', 'ws://') + '/ws');
+		const transport = new WSDOMTransport(WSDOM, [], {
+			transport: { kind: "websocket", url: window.location.href.replace('http://', 'ws://') + '/ws' },
+			onStatusChange: (status) => {
+				if (status === "open") setConnectingLabel("Connected to WSDOM server.");
+				if (status === "reconnecting") setConnectingLabel("Disconnected from WSDOM server. Retrying…");
+			},
+			onError: () => setConnectingLabel("WebSocket error. Retrying…"),
+		});
+		void transport.start();
 	</script>
 	<style>
 		#connecting-label {

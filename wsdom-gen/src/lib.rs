@@ -81,6 +81,18 @@ pub fn gen<D: Display>(modules: &[Module<D>], rpcs: &BTreeMap<String, usize>) ->
         )
     );
 }
-pub fn launch(url: &str, path: &str, rpcs: &BTreeMap<String, usize>) -> String {
-    return format!("import WSDOMConnectWebSocket from '{path}'\nexport const WS = WSDOMConnectToServer('{url}')\n{}",rpcs.iter().map(|(a,_)|format!("export const {a} = WS.{a};")).join(";"));
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn generated_client_contains_no_transport_implementation() {
+        let generated = gen::<&str>(&[], &BTreeMap::new());
+
+        assert!(generated.contains("export class WSDOM"));
+        assert!(generated.contains("constructor(sender: SendMessage"));
+        assert!(!generated.contains("WSDOMConnectWebSocket"));
+        assert!(!generated.contains("new WebSocket"));
+    }
 }

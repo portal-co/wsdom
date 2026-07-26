@@ -26,7 +26,13 @@ fn hello(browser: wsdom::Browser) {
 ```
 ```js
 // this JavaScript code runs on the browser
-WSDOMConnectWebSocket("ws://my-website.domain:4000/");
+import { WSDOM } from "./servant.js";
+import { WSDOMTransport } from "./transport.js";
+
+const connection = new WSDOMTransport(WSDOM, [{}], {
+  transport: { kind: "websocket", url: "ws://my-website.domain:4000/" },
+});
+await connection.start();
 ```
 
 Our full "Hello World!" code is available [here](/examples/hello/src/main.rs).
@@ -96,6 +102,24 @@ property-mangled name scheme. Existing callers retain canonical protocol
 spelling; configurable source emitters must use the safe resolver helpers.
 See [`PROTOCOL_HOST_METHOD_NAMES.md`](PROTOCOL_HOST_METHOD_NAMES.md).
 
+## Browser transports
+
+`WSDOMTransport` is a standalone TypeScript module. It constructs any generated,
+sender-first `WSDOM` class and exposes that client as `connection.client`. Choose a
+transport explicitly: `websocket` accepts a URL and optional WebSocket protocols;
+`long-poll` repeatedly POSTs to one endpoint and defaults to a 1-second interval.
+
+The long-poll request and response bodies are both JSON arrays of ordered protocol
+strings. Session identity and authentication belong in the endpoint URL, cookies, or
+`requestInit` headers/credentials. Polling and WebSocket failures are reported through
+`onError` and retry with bounded exponential backoff.
+
+Protocol wrappers are async duplex middleware. Their `outbound` hooks must forward
+application frames with `context.sendOutbound`; `inbound` hooks must forward received
+frames with `context.sendInbound`. A wrapper may emit its own control frames in either
+direction, keep request/reply state, and call `context.interact(request)` when the host
+supplies an async `interact` handler.
+
 ## Details
 The [How It Works](how-it-works.md) document describes how WSDOM works in more details.
 
@@ -106,4 +130,3 @@ The crate is [on crates.io](https://crates.io/crates/wsdom) and the documentatio
 Use WSDOM at your own risk. It is alpha-quality at best.
 
 The Rust code produced by our `.d.ts` loader might change between WSDOM versions.
-
