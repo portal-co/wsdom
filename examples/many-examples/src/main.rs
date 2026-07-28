@@ -5,13 +5,22 @@ mod counter;
 
 use std::future::Future;
 
-use axum::{extract::WebSocketUpgrade, response::Html, routing::get, Router};
+use axum::{extract::WebSocketUpgrade, http::header, response::Html, routing::get, Router};
 use wsdom::Browser;
 use wsdom_axum::socket_to_browser;
 
 #[tokio::main]
 async fn main() {
     let router = Router::new()
+        .route(
+            "/transport.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript")],
+                    include_str!("../../../js/transport.js"),
+                )
+            }),
+        )
         .nest("/audio", make_one_demo("audio", audio::app))
         .nest("/canvas", make_one_demo("canvas", canvas::app))
         .nest(

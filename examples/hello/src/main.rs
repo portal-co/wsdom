@@ -1,9 +1,26 @@
-use axum::{extract::ws::WebSocketUpgrade, response::Response, routing::get, Router};
+use axum::{
+    extract::ws::WebSocketUpgrade,
+    http::header,
+    response::{Html, Response},
+    routing::get,
+    Router,
+};
 use wsdom::Browser;
 
 #[tokio::main]
 async fn main() {
-    let router = Router::new().route("/ws", get(handler));
+    let router = Router::new()
+        .route("/", get(|| async { Html(include_str!("../index.html")) }))
+        .route(
+            "/transport.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript")],
+                    include_str!("../../../js/transport.js"),
+                )
+            }),
+        )
+        .route("/ws", get(handler));
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:4000").await.unwrap();
     axum::serve(listener, router).await.unwrap();

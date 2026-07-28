@@ -2,52 +2,23 @@
 type Id = number;
 type Value = unknown;
 type SendMessage = (msg: string) => void;
-
-export function WSDOMConnectWebSocket(wsUrl: string | URL, wsProtocols?: string | string[]): WSDOM {
-	const ws = new WebSocket(wsUrl, wsProtocols);
-    const q: string[] = [];
-	const wsdom = new WSDOM((msg: string) => {
-        if(ws.readyState !== WebSocket.OPEN){
-            q.push(msg);
-            return;
-        }
-		ws.send(msg);
-	});
-	ws.onopen = () => {
-        for(const msg of q){
-            ws.send(msg);
-        }
-        q.length = 0;
-		console.debug("WSDOM WebSocket connection open!");
-		console.debug("WebSocket object", ws);
-		console.debug("WSDOM object", wsdom);
-	}
-	ws.onmessage = (msg: MessageEvent<string>) => {
-		wsdom.handleIncomingMessage(msg.data);
-	};
-	ws.onclose = (ev: CloseEvent) => {
-		console.debug("WSDOM WebSocket closed", ev);
-	}
-	ws.onerror = (ev: Event) => {
-		console.warn("WSDOM WebSocket errored", ev);
-	}
-    return wsdom;
-}
 export class WSDOM{
 	#sender: SendMessage;
 	#values: Map<Id, { value: Value, error: boolean }>;
     #callbacks: Map<Id,(value: Value) => void>;
     #next_value: Id;
-	#args: {};
-    public handleIncomingMessage(msg: string) {
-		const fn = new Function('_w', msg);
-		fn(this.#api);
+	#Function: {new(w: "_w", msg: string): (api: any) => any};
+    public async handleIncomingMessage(msg: string) {
+		const fn = new this.#Function('_w', msg);
+		await fn(this.#api);
 	}
-	constructor(sender: SendMessage, args: {}) {
+		#args: {};
+	constructor(sender: SendMessage, args: {}, Function: { new(w: "_w", msg: string): (api: any) => any } = globalThis.Function as any) {
 		this.#sender = sender;
 		this.#values = new Map();
         this.#callbacks = new Map();
         this.#next_value = Number.MAX_SAFE_INTEGER;
+		this.#Function = Function;
 		this.#args = {};
         Object.freeze(this);
 	}
